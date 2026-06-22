@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WeConek - Messaging for Construction Teams</title>
+    <link rel="icon" type="image/png" href="WeConek.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        // NOUVELLE PALETTE - remplace WhatsApp green
+                        brand: '#00C853',      // Votre vert vif (à ajuster)
+                        brandDark: '#009624',   // Version foncée
+                        brandLight: '#B9F6CA',  // Version claire
+                        brandBg: '#E8F5E9',     // Fond très clair
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #F5F5F5;
+            color: #1A1A1A;
+        }
+
+        /* --- HERO GRADIENT avec votre vert --- */
+        .hero-gradient {
+            background: linear-gradient(135deg, #009624 0%, #00C853 60%, #69F0AE 100%);
+        }
+
+        /* --- BOUTON PRINCIPAL --- */
+        .download-btn {
+            background: #00C853;
+            color: white;
+            padding: 12px 28px;
+            border-radius: 12px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: background 0.2s;
+        }
+        .download-btn:hover {
+            background: #009624;
+        }
+
+        /* --- BOUTON OUTLINE --- */
+        .btn-outline-brand {
+            border: 2px solid #00C853;
+            color: #00C853;
+            transition: all 0.2s;
+        }
+        .btn-outline-brand:hover {
+            background: #00C853;
+            color: white;
+        }
+
+        /* --- FEATURE ICON --- */
+        .feature-icon {
+            background: #B9F6CA;
+            color: #009624;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+        }
+        .feature-icon svg {
+            width: 28px;
+            height: 28px;
+        }
+
+        /* --- PHONE MOCKUP --- */
+        .phone-mockup {
+            background: #1A1A1A;
+            border-radius: 32px;
+            padding: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 320px;
+            margin: 0 auto;
+        }
+        .phone-mockup .screen {
+            background: #0B141A;
+            border-radius: 20px;
+            overflow: hidden;
+            aspect-ratio: 9/19;
+        }
+        .phone-mockup .status-bar {
+            background: #1A1A1A;
+            padding: 8px 16px;
+            display: flex;
+            justify-content: space-between;
+            color: white;
+            font-size: 11px;
+        }
+        .phone-mockup .chat-header {
+            background: #1A1A1A;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid #2A2A2A;
+        }
+        .phone-mockup .chat-header .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #00C853;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 14px;
+        }
+        .phone-mockup .chat-header .name {
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .phone-mockup .chat-header .status {
+            color: #00C853;
+            font-size: 11px;
+        }
+        .phone-mockup .messages {
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            background-image: url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.03"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');
+            min-height: 300px;
+        }
+        .phone-mockup .message-received {
+            background: white;
+            padding: 6px 10px;
+            border-radius: 6px 6px 6px 0;
+            font-size: 12px;
+            max-width: 80%;
+            align-self: flex-start;
+            color: #1A1A1A;
+        }
+        .phone-mockup .message-sent {
+            background: #00C853;
+            padding: 6px 10px;
+            border-radius: 6px 6px 0 6px;
+            font-size: 12px;
+            max-width: 80%;
+            align-self: flex-end;
+            color: white;
+        }
+        .phone-mockup .message-time {
+            font-size: 9px;
+            opacity: 0.6;
+            margin-top: 2px;
+            text-align: right;
+        }
+        .phone-mockup .input-area {
+            background: #1A1A1A;
+            padding: 8px 12px;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .phone-mockup .input-area input {
+            flex: 1;
+            background: #2A2A2A;
+            border: none;
+            border-radius: 20px;
+            padding: 6px 14px;
+            font-size: 12px;
+            color: white;
+            outline: none;
+        }
+        .phone-mockup .input-area input::placeholder {
+            color: #8A8A8A;
+        }
+        .phone-mockup .input-area .send-btn {
+            background: #00C853;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        /* --- TYPOGRAPHIE --- */
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        @media (max-width: 768px) {
+            .section-title { font-size: 2rem; }
+        }
+        .logo-text {
+            font-weight: 800;
+            font-size: 1.8rem;
+            letter-spacing: -0.02em;
+        }
+        .logo-text span { color: #00C853; }
+        .brand-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #00C853;
+            border-radius: 50%;
+            margin-right: 6px;
+        }
+
+        /* --- FONDS AVEC VOTRE VERT --- */
+        .brand-bg-dark { background: #009624; }
+        .brand-bg { background: #00C853; }
+        .brand-bg-light { background: #E8F5E9; }
+
+        /* --- ANIMATION --- */
+        .feature-item {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease forwards;
+        }
+        .feature-item:nth-child(1) { animation-delay: 0.05s; }
+        .feature-item:nth-child(2) { animation-delay: 0.10s; }
+        .feature-item:nth-child(3) { animation-delay: 0.15s; }
+        .feature-item:nth-child(4) { animation-delay: 0.20s; }
+        .feature-item:nth-child(5) { animation-delay: 0.25s; }
+        .feature-item:nth-child(6) { animation-delay: 0.30s; }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========== TOP BANNER ========== -->
+    <div class="bg-[#009624] text-white/80 text-center py-2.5 text-xs sm:text-sm px-4 border-b border-white/10">
+        <span class="font-medium text-white">📱 WeConek</span>
+        <span class="mx-2">|</span>
+        <span>Secure messaging & collaboration for construction teams</span>
+        <span class="mx-2">|</span>
+        <a href="https://app.weconek.app/auth/sign_in" target="_blank" class="text-[#B9F6CA] hover:underline font-medium">Start free trial →</a>
+    </div>
+
+    <!-- ========== HERO SECTION ========== -->
+    <section class="hero-gradient text-white py-16 md:py-24 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <div class="flex items-center gap-3 mb-6">
+                        <img src="WeConek_logo.png" alt="WeConek" class="h-12 w-auto" onerror="this.src='https://via.placeholder.com/48x48?text=W'" />
+                        <span class="logo-text text-white">We<span>Conek</span></span>
+                    </div>
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="brand-dot"></span>
+                        <span class="text-sm font-medium uppercase tracking-wider text-white/80">10,000+ teams</span>
+                    </div>
+                    <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight tracking-tight">
+                        Messaging for <br /><span class="text-[#B9F6CA]">construction teams</span>
+                    </h1>
+                    <p class="text-lg md:text-xl text-white/80 mt-6 max-w-lg">
+                        Secure, instant messaging designed for the jobsite. Share updates, photos, and documents with your entire crew in real-time.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 mt-8">
+                        <a href="https://app.weconek.app/auth/sign_in" target="_blank" class="download-btn">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+                            Start free trial
+                        </a>
+                        <a href="https://app.weconek.app/auth/sign_in" target="_blank" class="bg-white/10 backdrop-blur-sm border border-white/30 text-white font-semibold px-8 py-3 rounded-xl hover:bg-white/20 transition text-center">
+                            Start free trial
+                        </a>
+                    </div>
+                    <p class="text-white/50 text-sm mt-6">Free for 14 days · No credit card required · Cancel anytime</p>
+                </div>
+
+                <!-- Phone Mockup -->
+                <div class="flex justify-center">
+                    <div class="phone-mockup">
+                        <div class="screen">
+                            <div class="status-bar">
+                                <span>9:41</span>
+                                <span>📶 📶 🔋</span>
+                            </div>
+                            <div class="chat-header">
+                                <div class="avatar">JD</div>
+                                <div>
+                                    <div class="name">John Davis</div>
+                                    <div class="status">● Online — Site Manager</div>
+                                </div>
+                            </div>
+                            <div class="messages">
+                                <div class="message-received">
+                                    Crew schedule for today is set. 12 workers on site.
+                                    <div class="message-time">07:30</div>
+                                </div>
+                                <div class="message-sent">
+                                    Perfect. Can you confirm the crane operator?
+                                    <div class="message-time">07:32</div>
+                                </div>
+                                <div class="message-received">
+                                    ✅ Confirmed. Also, 3 new workers joining tomorrow.
+                                    <div class="message-time">07:35</div>
+                                </div>
+                                <div class="message-sent">
+                                    Great! I'll update the crew list.
+                                    <div class="message-time">07:38</div>
+                                </div>
+                                <div class="message-received" style="background: #B9F6CA;">
+                                    📋 <span class="font-medium">Daily_attendance.xlsx</span>
+                                    <div class="message-time">07:42</div>
+                                </div>
+                            </div>
+                            <div class="input-area">
+                                <input type="text" placeholder="Type a message..." />
+                                <div class="send-btn">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== SOCIAL PROOF ========== -->
+    <section class="py-12 bg-white border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <p class="text-center text-xs font-semibold uppercase tracking-[0.25em] text-gray-400 mb-8">Trusted by industry leaders</p>
+            <div class="flex flex-wrap justify-center items-center gap-8 md:gap-12">
+                <img src="clients1.png" alt="Client" class="h-8 md:h-10 w-auto object-contain opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition" />
+                <img src="clients2.png" alt="Client" class="h-8 md:h-10 w-auto object-contain opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition" />
+                <img src="clients3.png" alt="Client" class="h-8 md:h-10 w-auto object-contain opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition" />
+                <img src="clients4.png" alt="Client" class="h-8 md:h-10 w-auto object-contain opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition" />
+                <img src="clients5.png" alt="Client" class="h-8 md:h-10 w-auto object-contain opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition" />
+                <img src="clients6.jpg" alt="Client" class="h-8 md:h-10 w-auto object-contain opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition" />
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== FEATURES ========== -->
+    <section class="py-16 md:py-24 bg-[#F5F5F5]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="inline-block bg-[#B9F6CA] text-[#009624] text-sm font-semibold uppercase tracking-wider px-4 py-1.5 rounded-full mb-4">What WeConek offers</span>
+                <h2 class="section-title text-[#009624]">Everything you need to stay connected</h2>
+                <p class="text-lg text-gray-600 mt-4">From instant messaging to voice calls and file sharing — WeConek brings your team together.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                <div class="bg-white p-6 rounded-2xl shadow-sm hover:shadow-lg transition text-center">
+                    <div class="feature-icon">
+                        <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.88.57 3.63 1.54 5.07L2 21l4.12-1.23A9.94 9.94 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-1.84 0-3.56-.6-4.94-1.61l-.35-.25-2.47.74.92-2.45-.26-.36A7.94 7.94 0 014 12c0-4.41 3.59-8 8-8s8 3.59 8 8-3.59 8-8 8z"/></svg>
+                    </div>
+                    <h3 class="font-bold text-[#009624]">Messaging</h3>
+                    <p class="text-sm text-gray-600 mt-1">Instant messaging for your entire team</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm hover:shadow-lg transition text-center">
+                    <div class="feature-icon">
+                        <svg fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+                    </div>
+                    <h3 class="font-bold text-[#009624]">Voice & video calls</h3>
+                    <p class="text-sm text-gray-600 mt-1">High-quality calls with your crew</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm hover:shadow-lg transition text-center">
+                    <div class="feature-icon">
+                        <svg fill="currentColor" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+                    </div>
+                    <h3 class="font-bold text-[#009624]">End-to-end encryption</h3>
+                    <p class="text-sm text-gray-600 mt-1">Your conversations stay private</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm hover:shadow-lg transition text-center">
+                    <div class="feature-icon">
+                        <svg fill="currentColor" viewBox="0 0 24 24"><path d="M19.5 4.5c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2s2-.9 2-2v-11c0-1.1-.9-2-2-2zm-10.5 4v7c0 1.1.9 2 2 2h1.5v-11H11c-1.1 0-2 .9-2 2zm-4 0v7c0 1.1.9 2 2 2h1.5v-11H7c-1.1 0-2 .9-2 2zm-4 3c0 1.1.9 2 2 2h1.5v-4H3c-1.1 0-2 .9-2 2z"/></svg>
+                    </div>
+                    <h3 class="font-bold text-[#009624]">File sharing</h3>
+                    <p class="text-sm text-gray-600 mt-1">Share photos, documents, and plans</p>
+                </div>
+            </div>
+
+            <!-- Additional Features -->
+            <div class="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                <div class="bg-white p-6 rounded-2xl shadow-sm hover:shadow-md transition flex items-center gap-5 feature-item">
+                    <div class="w-14 h-14 rounded-full bg-[#B9F6CA] flex items-center justify-center text-2xl flex-shrink-0">🎨</div>
+                    <div>
+                        <h4 class="font-bold text-[#009624]">Custom themes</h4>
+                        <p class="text-sm text-gray-600">20 colors to personalize your experience</p>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm hover:shadow-md transition flex items-center gap-5 feature-item">
+                    <div class="w-14 h-14 rounded-full bg-[#B9F6CA] flex items-center justify-center text-2xl flex-shrink-0">📌</div>
+                    <div>
+                        <h4 class="font-bold text-[#009624]">Pin chats</h4>
+                        <p class="text-sm text-gray-600">Pin up to 20 important conversations</p>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm hover:shadow-md transition flex items-center gap-5 feature-item">
+                    <div class="w-14 h-14 rounded-full bg-[#B9F6CA] flex items-center justify-center text-2xl flex-shrink-0">📱</div>
+                    <div>
+                        <h4 class="font-bold text-[#009624]">Multi-device support</h4>
+                        <p class="text-sm text-gray-600">Use on phone, tablet, and desktop</p>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm hover:shadow-md transition flex items-center gap-5 feature-item">
+                    <div class="w-14 h-14 rounded-full bg-[#B9F6CA] flex items-center justify-center text-2xl flex-shrink-0">🤖</div>
+                    <div>
+                        <h4 class="font-bold text-[#009624]">AI chatbots</h4>
+                        <p class="text-sm text-gray-600">Automate responses and workflows</p>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm hover:shadow-md transition flex items-center gap-5 feature-item">
+                    <div class="w-14 h-14 rounded-full bg-[#B9F6CA] flex items-center justify-center text-2xl flex-shrink-0">🔗</div>
+                    <div>
+                        <h4 class="font-bold text-[#009624]">CRM integration</h4>
+                        <p class="text-sm text-gray-600">Connect with your existing tools</p>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm hover:shadow-md transition flex items-center gap-5 feature-item">
+                    <div class="w-14 h-14 rounded-full bg-[#B9F6CA] flex items-center justify-center text-2xl flex-shrink-0">⭐</div>
+                    <div>
+                        <h4 class="font-bold text-[#009624]">Exclusive icons</h4>
+                        <p class="text-sm text-gray-600">Stand out with premium icons</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== FEATURE DETAIL: Team Communication ========== -->
+    <section class="py-16 md:py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <span class="inline-block bg-[#B9F6CA] text-[#009624] text-sm font-semibold uppercase tracking-wider px-4 py-1.5 rounded-full mb-4">Team communication</span>
+                    <h2 class="text-3xl md:text-4xl font-bold text-[#009624]">Chat, call, and share with your crew</h2>
+                    <p class="text-lg text-gray-600 mt-4">Keep everyone on the same page with real-time messaging, voice calls, and file sharing — all in one app.</p>
+                    <ul class="mt-6 space-y-3">
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 text-[#00C853] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                            <span>Instant group and private messaging</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 text-[#00C853] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                            <span>High-quality voice and video calls</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 text-[#00C853] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                            <span>Share photos, documents, and plans</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 text-[#00C853] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                            <span>End-to-end encrypted for security</span>
+                        </li>
+                    </ul>
+                    <a href="https://app.weconek.app/auth/sign_in" target="_blank" class="inline-block mt-8 bg-[#00C853] text-white font-bold px-8 py-3.5 rounded-xl hover:bg-[#009624] transition">
+                        Start free trial
+                    </a>
+                </div>
+                <div class="flex justify-center">
+                    <div class="phone-mockup">
+                        <div class="screen">
+                            <div class="status-bar">
+                                <span>9:41</span>
+                                <span>📶 📶 🔋</span>
+                            </div>
+                            <div class="chat-header">
+                                <div class="avatar" style="background: #009624;">SM</div>
+                                <div>
+                                    <div class="name">Sarah Mitchell</div>
+                                    <div class="status">● Online — Crew Manager</div>
+                                </div>
+                            </div>
+                            <div class="messages" style="min-height: 320px;">
+                                <div class="message-received" style="background: #B9F6CA;">
+                                    👷 <span class="font-medium">Crew assignment - Tower B</span>
+                                    <div style="margin-top:4px;font-size:10px;color:#666;">12 workers assigned · 8:00 AM start</div>
+                                    <div class="message-time">06:45</div>
+                                </div>
+                                <div class="message-sent">
+                                    Confirmed. All workers have valid certifications.
+                                    <div class="message-time">06:48</div>
+                                </div>
+                                <div class="message-received">
+                                    📋 <span class="font-medium">Daily_schedule_TowerB.pdf</span>
+                                    <div style="margin-top:4px;font-size:10px;color:#666;">Updated schedule with breaks</div>
+                                    <div class="message-time">06:52</div>
+                                </div>
+                                <div class="message-sent">
+                                    ✅ Perfect. I'll share with the crew.
+                                    <div class="message-time">06:55</div>
+                                </div>
+                            </div>
+                            <div class="input-area">
+                                <input type="text" placeholder="Type a message..." />
+                                <div class="send-btn">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== FEATURE DETAIL: File Sharing ========== -->
+    <section class="py-16 md:py-24 bg-[#F5F5F5]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="flex justify-center order-2 lg:order-1">
+                    <div class="phone-mockup">
+                        <div class="screen">
+                            <div class="status-bar">
+                                <span>9:41</span>
+                                <span>📶 📶 🔋</span>
+                            </div>
+                            <div class="chat-header">
+                                <div class="avatar" style="background: #009624;">TR</div>
+                                <div>
+                                    <div class="name">Thomas Rodriguez</div>
+                                    <div class="status">● Online — Project Lead</div>
+                                </div>
+                            </div>
+                            <div class="messages" style="min-height: 320px;">
+                                <div class="message-received">
+                                    📋 <span class="font-medium">Foundation_inspection.pdf</span>
+                                    <div style="margin-top:4px;font-size:10px;color:#666;">Priority: High · Due: Today 4:00 PM</div>
+                                    <div class="message-time">09:15</div>
+                                </div>
+                                <div class="message-sent">
+                                    I'll take care of it. Team is ready.
+                                    <div class="message-time">09:18</div>
+                                </div>
+                                <div class="message-received" style="background: #B9F6CA;">
+                                    🏗️ <span class="font-medium">Crane_lift_plan.pdf</span>
+                                    <div style="margin-top:4px;font-size:10px;color:#666;">Assigned to: Mike · Status: In progress</div>
+                                    <div class="message-time">09:22</div>
+                                </div>
+                                <div class="message-sent">
+                                    Mike is on site. He'll confirm when ready.
+                                    <div class="message-time">09:25</div>
+                                </div>
+                            </div>
+                            <div class="input-area">
+                                <input type="text" placeholder="Type a message..." />
+                                <div class="send-btn">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="order-1 lg:order-2">
+                    <span class="inline-block bg-[#B9F6CA] text-[#00C853] text-sm font-semibold uppercase tracking-wider px-4 py-1.5 rounded-full mb-4">File sharing</span>
+                    <h2 class="text-3xl md:text-4xl font-bold text-[#009624]">Share documents and plans instantly</h2>
+                    <p class="text-lg text-gray-600 mt-4">Send photos, PDFs, spreadsheets, and more to your entire crew or specific team members. All files are stored securely.</p>
+                    <ul class="mt-6 space-y-3">
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 text-[#00C853] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                            <span>Share photos, videos, and documents</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 text-[#00C853] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                            <span>View files directly in the app</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 text-[#00C853] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                            <span>Organize files by project or team</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 text-[#00C853] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                            <span>Secure, encrypted storage</span>
+                        </li>
+                    </ul>
+                    <a href="https://app.weconek.app/auth/sign_in" target="_blank" class="inline-block mt-8 bg-[#00C853] text-white font-bold px-8 py-3.5 rounded-xl hover:bg-[#009624] transition">
+                        Start free trial
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== TESTIMONIAL ========== -->
+    <section class="py-16 md:py-20 bg-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="flex justify-center mb-6">
+                <img src="clients1.png" alt="Client" class="h-12 w-auto object-contain" />
+            </div>
+            <blockquote class="text-xl md:text-2xl font-light text-gray-700 leading-relaxed italic">
+                "WeConek has completely transformed how our team communicates. We went from chaotic WhatsApp groups to organized, secure messaging. It's a game-changer."
+            </blockquote>
+            <p class="mt-6 font-bold text-[#009624]">— Frédéric Briand</p>
+            <p class="text-sm text-gray-500">Project Lead, KNS Furnace Rebuild</p>
+        </div>
+    </section>
+
+    <!-- ========== STATS ========== -->
+    <section class="py-16 md:py-20 bg-[#00C853] text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-3 gap-8 text-center">
+                <div>
+                    <div class="text-4xl font-extrabold">10K+</div>
+                    <p class="text-white/70 mt-2">Active teams</p>
+                </div>
+                <div>
+                    <div class="text-4xl font-extrabold">4.9</div>
+                    <div class="flex justify-center gap-0.5 mt-2">
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg class="w-5 h-5 text-yellow-400/50" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    </div>
+                    <p class="text-white/70 mt-1">On the App Store</p>
+                </div>
+                <div>
+                    <div class="text-4xl font-extrabold">4M+</div>
+                    <p class="text-white/70 mt-2">Messages sent daily</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== FINAL CTA ========== -->
+    <section class="py-16 md:py-20 bg-[#ECE5DD] text-black">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold text-white">Start communicating with your team today</h2>
+            <p class="text-lg text-white/80 mt-4 max-w-2xl mx-auto">Join 10,000+ teams already using WeConek to stay connected on the jobsite.</p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4 mt-8">
+                <a href="https://app.weconek.app/auth/sign_in" target="_blank" class="bg-white text-[#00C853] font-bold px-8 py-3.5 rounded-xl hover:bg-gray-100 transition">
+                    <svg class="w-5 h-5 inline mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+                    Start free trial
+                </a>
+                <a href="https://app.weconek.app/auth/sign_in" target="_blank" class="bg-white/20 backdrop-blur-sm border border-white/30 text-white font-semibold px-8 py-3 rounded-xl hover:bg-white/30 transition text-center">
+                    Start free trial
+                </a>
+            </div>
+            <p class="text-white/50 text-sm mt-6">Free for 14 days · No credit card · Cancel anytime</p>
+        </div>
+    </section>
+
+    <!-- ========== FOOTER ========== -->
+    <footer class="bg-[#00C853] text-white/70 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 pb-8 border-b border-white/10">
+                <div>
+                    <h4 class="font-bold text-white mb-4">WeConek</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-white transition">Features</a></li>
+                        <li><a href="#" class="hover:text-white transition">Security</a></li>
+                        <li><a href="#" class="hover:text-white transition">Blog</a></li>
+                        <li><a href="#" class="hover:text-white transition">About</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white mb-4">Download</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-white transition">iPhone</a></li>
+                        <li><a href="#" class="hover:text-white transition">iPad</a></li>
+                        <li><a href="#" class="hover:text-white transition">Android</a></li>
+                        <li><a href="#" class="hover:text-white transition">Web</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white mb-4">Company</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-white transition">Careers</a></li>
+                        <li><a href="#" class="hover:text-white transition">Contact</a></li>
+                        <li><a href="#" class="hover:text-white transition">Press</a></li>
+                        <li><a href="#" class="hover:text-white transition">Partners</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white mb-4">Legal</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-white transition">Privacy</a></li>
+                        <li><a href="#" class="hover:text-white transition">Terms</a></li>
+                        <li><a href="#" class="hover:text-white transition">Cookies</a></li>
+                        <li><a href="#" class="hover:text-white transition">Security</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4 pt-8 text-sm">
+                <p>© 2026 WeConek — PTEM France. All rights reserved.</p>
+                <div class="flex gap-4">
+                    <a href="#" class="hover:text-white transition" aria-label="Facebook">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z"/></svg>
+                    </a>
+                    <a href="#" class="hover:text-white transition" aria-label="LinkedIn">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.847-3.037-1.85 0-2.132 1.445-2.132 2.939v5.667h-3.554v-11.532h3.414v1.579h.048c.475-.9 1.637-1.85 3.376-1.85 3.61 0 4.274 2.375 4.274 5.464v6.339zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.139.92-2.065 2.063-2.065 1.142 0 2.065.926 2.065 2.065 0 1.139-.923 2.065-2.065 2.065zm1.782 13.019h-3.565v-11.532h3.565v11.532zM22.225 0h-20.452c-.975 0-1.773.798-1.773 1.777v20.445c0 .979.798 1.777 1.773 1.777h20.452c.98 0 1.777-.798 1.777-1.777v-20.445c0-.979-.798-1.777-1.777-1.777z"/></svg>
+                    </a>
+                    <a href="#" class="hover:text-white transition" aria-label="Twitter">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
